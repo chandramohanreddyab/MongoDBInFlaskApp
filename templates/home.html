@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Enter Employee Details </h2>
+<form action="/entry" method="post">
+  <div>
+    <label for="first_name">First Name</label>
+    <input type="text" id="first_name" name="first_name" required>
+  </div>
+  <div>
+    <label for="last_name">Last Name</label>
+    <input type="text" id="last_name" name="last_name" required>
+  </div>
+  <div>
+    <label for="skills">Skills (comma-separated)</label>
+    <input type="text" id="skills" name="skills" placeholder="e.g. Python, SQL, ML" required>
+  </div>
+  <div>
+    <label for="city">City</label>
+    <input type="text" id="city" name="city">
+  </div>
+  <div>
+    <label for="country">Country</label>
+    <input type="text" id="country" name="country">
+  </div>
+  <button type="submit">Submit</button>
+</form>
+{% endblock %}

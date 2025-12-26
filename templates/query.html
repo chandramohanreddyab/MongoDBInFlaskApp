@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<h1>Query Employees</h1>
+
+<form action="/query" method="get" style="margin-bottom:1rem;">
+  <div>
+    <label for="q">Search (any field)</label>
+    <input type="text" id="q" name="q" value="{{ request.args.get('q','') }}">
+  </div>
+  <div>
+    <label for="first_name">First Name</label>
+    <input type="text" id="first_name" name="first_name" value="{{ request.args.get('first_name','') }}">
+  </div>
+  <div>
+    <label for="last_name">Last Name</label>
+    <input type="text" id="last_name" name="last_name" value="{{ request.args.get('last_name','') }}">
+  </div>
+  <div>
+    <label for="skill">Skill</label>
+    <input type="text" id="skill" name="skill" value="{{ request.args.get('skill','') }}">
+  </div>
+  <div>
+    <label for="city">City</label>
+    <input type="text" id="city" name="city" value="{{ request.args.get('city','') }}">
+  </div>
+  <div>
+    <label for="country">Country</label>
+    <input type="text" id="country" name="country" value="{{ request.args.get('country','') }}">
+  </div>
+
+  <button type="submit">Search</button>
+  <a href="/query" style="margin-left:1rem;">Reset</a>
+</form>
+
+{# Header describing results #}
+{% set any_query = request.args.get('q') or request.args.get('first_name') or request.args.get('last_name') or request.args.get('skill') or request.args.get('city') or request.args.get('country') %}
+{% if request.args.get('skill') %}
+  <h2>Employees with "{{ request.args.get('skill') }}" are as follows ({{ employees|length if employees is defined else 0 }})</h2>
+{% elif request.args.get('q') %}
+  <h2>Employees matching "{{ request.args.get('q') }}" are as follows ({{ employees|length if employees is defined else 0 }})</h2>
+{% elif any_query %}
+  <h2>Employees matching query are as follows ({{ employees|length if employees is defined else 0 }})</h2>
+{% else %}
+  <h2>All Employees ({{ employees|length if employees is defined else 0 }})</h2>
+{% endif %}
+
+<table border="1" cellpadding="6" cellspacing="0" style="width:100%; border-collapse:collapse;">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Skills</th>
+      <th>City</th>
+      <th>Country</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if employees is defined and employees %}
+      {% for emp in employees %}
+      <tr>
+        <td>{{ emp.first_name }}</td>
+        <td>{{ emp.last_name }}</td>
+        <td>
+          {% if emp.skills is string %}
+            {{ emp.skills }}
+          {% else %}
+            {{ emp.skills | join(', ') }}
+          {% endif %}
+        </td>
+        <td>{{ emp.city }}</td>
+        <td>{{ emp.country }}</td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="5">No employees found.</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+
+<p style="margin-top:1rem;">
+  <a href="/">Enter another employee</a> |
+  <a href="/query">New query</a>
+</p>
+
+{% endblock %}
